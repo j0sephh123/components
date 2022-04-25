@@ -13,19 +13,26 @@ import {
 
 const RatingFC = ({
   onChange,
-  numberOfStars = 5,
+  stars = 5,
   className,
   starProps,
 }: RatingProps) => {
-  const initialRating: Rating[] = useMemo(
-    () =>
-      Array.from(Array(numberOfStars).keys()).map((i) => ({
+  const initialRating: Rating[] = useMemo(() => {
+    if (typeof stars === "number") {
+      return Array.from(Array(stars).keys()).map((i) => ({
         id: i,
         active: false,
         clicked: false,
-      })),
-    [numberOfStars]
-  );
+      }));
+    }
+
+    return stars.map((label, i) => ({
+      id: i,
+      active: false,
+      clicked: false,
+      label,
+    }));
+  }, [stars]);
 
   const [hover, setHover] = useState(false);
   const [rating, setRating] = useState(initialRating);
@@ -99,6 +106,11 @@ const RatingFC = ({
             />
           );
         })}
+        {typeof stars === "object" && (
+          <div className={classes.label}>
+            {rating[ratingValue - 1] && rating[ratingValue - 1]["label"]}
+          </div>
+        )}
       </div>
     </>
   );

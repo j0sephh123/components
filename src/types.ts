@@ -2,6 +2,7 @@ export type Rating = {
   id: number;
   active: boolean;
   clicked: boolean;
+  label?: string;
 };
 
 export enum RatingType {
@@ -12,7 +13,22 @@ export enum RatingType {
 
 export type RatingProps = {
   onChange: (val: number) => void;
-  numberOfStars?: 5 | 10;
+  stars?:
+    | 5
+    | 10
+    | [string, string, string, string, string]
+    | [
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string
+      ];
   className?: string;
   starProps: {
     type: RatingType;

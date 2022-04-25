@@ -1,4 +1,4 @@
-import { Rating } from "../../types";
+import { Rating, StarSize } from "../../types";
 
 export const findItemIndex = <T extends { id: number }>(
   itemArg: T,
@@ -38,3 +38,8 @@ export const mouseEnterSlice = (prev: Rating[], index: number, id: number) => [
   ...prev.slice(0, index + 1).map((item) => setClickedItems(item, id, true)),
   ...prev.slice(index + 1),
 ];
+
+export const defaults = {
+  fill: "#EFCE4A",
+  size: StarSize.medium
+}

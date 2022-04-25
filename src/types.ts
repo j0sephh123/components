@@ -11,8 +11,14 @@ export enum RatingType {
 }
 
 export type RatingProps = {
-  initialRating: Rating[];
-  type: RatingType;
+  onChange: (val: number) => void;
+  numberOfStars?: 5 | 10;
+  className?: string;
+  starProps: {
+    type: RatingType;
+    starClassName?: string;
+    fill?: string;
+  };
 };
 
 export type StarProps = {
@@ -22,7 +28,14 @@ export type StarProps = {
   onClick: (id: number) => void;
   onMouseEnter: (id: number) => void;
   onMouseLeave: (id: number) => void;
-} & Rating;
+  index: number;
+
+  starProps: {
+    type: RatingType;
+    starClassName?: string;
+    fill?: string;
+  };
+} & Partial<Rating>;
 
 export enum StarSize {
   small = "18px",

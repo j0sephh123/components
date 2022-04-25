@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { StarProps, StarSize } from "../../../types";
+import { RatingType, StarProps, StarSize } from "../../../types";
+import { defaults } from "../utils";
 import classes from "./Star.module.css";
 
 const emptyStar = {
@@ -26,31 +27,31 @@ const activeStar = {
   childProps: {
     points: `26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798 
     10.288,52.549 13.467,34.013 0,20.887 18.611,18.182`,
-    style: { fill: "#EFCE4A" },
   },
 };
 
 const Star = ({
-  size = StarSize.medium,
-  disabled = false,
-  readOnly = false,
+  size = defaults.size,
   onClick,
   onMouseEnter,
   onMouseLeave,
-  id,
+  index,
   active,
+  starProps: { type, fill = defaults.fill, starClassName },
 }: StarProps) => {
-  const isDisabledOrReadOnly = disabled || readOnly;
+  const disabled = type === RatingType.disabled;
+  const readOnly = type === RatingType.readOnly;
 
-  console.log({ disabled, readOnly });
+  const isDisabledOrReadOnly = disabled || readOnly;
 
   return (
     <svg
-      onMouseEnter={() => isDisabledOrReadOnly || onMouseEnter(id)}
-      onMouseLeave={() => isDisabledOrReadOnly || onMouseLeave(id)}
-      onClick={() => isDisabledOrReadOnly || onClick(id)}
+      onMouseEnter={() => isDisabledOrReadOnly || onMouseEnter(index)}
+      onMouseLeave={() => isDisabledOrReadOnly || onMouseLeave(index)}
+      onClick={() => isDisabledOrReadOnly || onClick(index)}
       className={clsx(
         classes.Star,
+        starClassName,
         disabled && classes.Star__disabled,
         readOnly && classes.Star__readOnly
       )}
@@ -58,7 +59,7 @@ const Star = ({
       height={size}
       {...(active ? activeStar.svgProps : emptyStar.svgProps)}>
       {active ? (
-        <polygon {...activeStar.childProps} />
+        <polygon {...activeStar.childProps} style={{ fill }} />
       ) : (
         <path {...emptyStar.childProps} />
       )}

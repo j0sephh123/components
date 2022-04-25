@@ -1,47 +1,69 @@
+import clsx from "clsx";
 import classes from "./Rating.module.css";
-import { useState } from "react";
-import { RatingProps, RatingType } from "../../types";
+import { useState, useMemo, useEffect } from "react";
+import { Rating, RatingProps } from "../../types";
 import Star from "./Star/Star";
 import {
   countActiveItems,
-  findItemIndex,
   mouseEnterSlice,
   resetActive,
   resetClickedAndActive,
   sliceItems,
 } from "./utils";
 
-const Rating = ({ initialRating, type }: RatingProps) => {
+const RatingFC = ({
+  onChange,
+  numberOfStars = 5,
+  className,
+  starProps,
+}: RatingProps) => {
+  const initialRating: Rating[] = useMemo(
+    () =>
+      Array.from(Array(numberOfStars).keys()).map((i) => ({
+        id: i,
+        active: false,
+        clicked: false,
+      })),
+    [numberOfStars]
+  );
+
   const [hover, setHover] = useState(false);
   const [rating, setRating] = useState(initialRating);
   const [hoverRating, setHoverRating] = useState(initialRating);
 
-  const onClick = (id: number) => {
-    const itemIndex = rating.findIndex((item) => findItemIndex(item, id));
-    const isActive = rating[itemIndex]["active"];
-    const isClicked = rating[itemIndex]["clicked"];
+  const ratingValue = countActiveItems(rating) + 1;
 
-    if (isActive && id === 5) {
+  useEffect(() => {
+    if (ratingValue === 0) {
+      return;
+    }
+
+    onChange(ratingValue);
+  }, [ratingValue]);
+
+  const onClick = (index: number) => {
+    const { id, active: isActive, clicked: isClicked } = rating[index];
+
+    if (isActive && index === rating.length - 1) {
       return setRating((prev) => prev.map(resetActive));
     }
 
-    if (isActive && id !== 1) {
+    if (isActive && index !== 0) {
       if (isClicked) {
         return setRating((prev) => prev.map(resetClickedAndActive));
       }
 
-      return setRating((prev) => sliceItems(prev, itemIndex, id));
+      return setRating((prev) => sliceItems(prev, index, id));
     }
 
-    setRating((prev) => sliceItems(prev, itemIndex, id));
+    setRating((prev) => sliceItems(prev, index, id));
   };
 
-  const onMouseEnter = (id: number) => {
+  const onMouseEnter = (hoveredItemIndex: number) => {
     setHover(true);
 
-    const hoveredItemIndex = rating.findIndex((item) =>
-      findItemIndex(item, id)
-    );
+    const { id } = rating[hoveredItemIndex];
+
     const lastActiveItemIndex = countActiveItems(rating);
 
     if (lastActiveItemIndex === hoveredItemIndex) {
@@ -63,17 +85,17 @@ const Rating = ({ initialRating, type }: RatingProps) => {
 
   return (
     <>
-      <div className={classes.Rating}>
-        {ratingCollection.map((ratingItem) => {
+      <div className={clsx(classes.Rating, className)}>
+        {ratingCollection.map(({ id, active }, index) => {
           return (
             <Star
-              disabled={type === RatingType.disabled}
-              readOnly={type === RatingType.readOnly}
-              key={ratingItem.id}
+              index={index}
+              key={id}
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}
               onClick={onClick}
-              {...ratingItem}
+              active={active}
+              starProps={starProps}
             />
           );
         })}
@@ -82,4 +104,4 @@ const Rating = ({ initialRating, type }: RatingProps) => {
   );
 };
 
-export default Rating;
+export default RatingFC;

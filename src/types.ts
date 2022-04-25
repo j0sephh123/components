@@ -4,6 +4,8 @@ export type StarProps = {
   id: number;
   disabled?: boolean;
   onClick: (id: number) => void;
+  onMouseEnter: (id: number) => void;
+  onMouseLeave: (id: number) => void;
 };
 
 export enum StarSize {

@@ -9,6 +9,8 @@ const Star = ({
   id,
   disabled = false,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
 }: StarProps) => {
   /**
    * on hover active - nothing
@@ -19,6 +21,8 @@ const Star = ({
 
   return (
     <svg
+      onMouseEnter={() => onMouseEnter(id)}
+      onMouseLeave={() => onMouseLeave(id)}
       onClick={() => onClick(id)}
       className={clsx(classes.Star, disabled && classes.Star__disabled)}
       width={size}

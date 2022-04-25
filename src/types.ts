@@ -1,5 +1,9 @@
 export type StarProps = {
   size?: StarSize;
+  active: boolean;
+  id: number;
+  disabled?: boolean;
+  onClick: (id: number) => void;
 };
 
 export enum StarSize {

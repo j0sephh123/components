@@ -1,16 +1,9 @@
-import { useState } from "react";
-import Star from "./Star";
-import { StarSize } from "./types";
+import Rating from "./components/Rating/Rating";
 
 function App() {
-
-
   return (
     <div className="App">
-      <Star size={StarSize.large} />
-      <Star size={StarSize.medium} />
-      <Star size={StarSize.small} />
-      <Star />
+      <Rating />
     </div>
   );
 }

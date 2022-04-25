@@ -1,3 +1,13 @@
+export type Rating = {
+  id: number;
+  active: boolean;
+  clicked: boolean;
+};
+
+export type RatingProps = {
+  initialRating: Rating[];
+};
+
 export type StarProps = {
   size?: StarSize;
   active: boolean;

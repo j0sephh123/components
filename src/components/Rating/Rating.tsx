@@ -1,16 +1,9 @@
 import Star from "./Star";
 import classes from "./Rating.module.css";
 import { useState } from "react";
+import { RatingProps } from "../../types";
 
-const initialRating = [
-  { id: 1, active: true, clicked: false },
-  { id: 2, active: true, clicked: false },
-  { id: 3, active: true, clicked: false },
-  { id: 4, active: true, clicked: false },
-  { id: 5, active: true, clicked: false },
-];
-
-const Rating = () => {
+const Rating = ({ initialRating }: RatingProps) => {
   const [hover, setHover] = useState(false);
   const [rating, setRating] = useState(initialRating);
   const [hoverRating, setHoverRating] = useState(initialRating);
@@ -122,11 +115,6 @@ const Rating = () => {
             />
           );
         })}
-      </div>
-      <div style={{ display: "flex" }}>
-        {" "}
-        <pre>{JSON.stringify(rating, null, 2)}</pre>
-        <pre>{JSON.stringify(hoverRating, null, 2)}</pre>
       </div>
     </>
   );

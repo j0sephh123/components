@@ -32,19 +32,28 @@ const activeStar = {
 
 const Star = ({
   size = StarSize.medium,
-  active,
-  id,
   disabled = false,
+  readOnly = false,
   onClick,
   onMouseEnter,
   onMouseLeave,
+  id,
+  active,
 }: StarProps) => {
+  const isDisabledOrReadOnly = disabled || readOnly;
+
+  console.log({ disabled, readOnly });
+
   return (
     <svg
-      onMouseEnter={() => onMouseEnter(id)}
-      onMouseLeave={() => onMouseLeave(id)}
-      onClick={() => onClick(id)}
-      className={clsx(classes.Star, disabled && classes.Star__disabled)}
+      onMouseEnter={() => isDisabledOrReadOnly || onMouseEnter(id)}
+      onMouseLeave={() => isDisabledOrReadOnly || onMouseLeave(id)}
+      onClick={() => isDisabledOrReadOnly || onClick(id)}
+      className={clsx(
+        classes.Star,
+        disabled && classes.Star__disabled,
+        readOnly && classes.Star__readOnly
+      )}
       width={size}
       height={size}
       {...(active ? activeStar.svgProps : emptyStar.svgProps)}>

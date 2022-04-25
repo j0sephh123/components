@@ -4,19 +4,25 @@ export type Rating = {
   clicked: boolean;
 };
 
+export enum RatingType {
+  controlled = "controlled",
+  readOnly = "readOnly",
+  disabled = "disabled",
+}
+
 export type RatingProps = {
   initialRating: Rating[];
+  type: RatingType;
 };
 
 export type StarProps = {
   size?: StarSize;
-  active: boolean;
-  id: number;
   disabled?: boolean;
+  readOnly?: boolean;
   onClick: (id: number) => void;
   onMouseEnter: (id: number) => void;
   onMouseLeave: (id: number) => void;
-};
+} & Rating;
 
 export enum StarSize {
   small = "18px",

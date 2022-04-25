@@ -1,4 +1,5 @@
 import Rating from "./components/Rating/Rating";
+import { RatingType } from "./types";
 
 const initialRating = [
   { id: 1, active: true, clicked: false },
@@ -11,7 +12,10 @@ const initialRating = [
 function App() {
   return (
     <div className="App">
-      <Rating initialRating={initialRating} />
+      {/* <Rating type={RatingType.controlled} initialRating={initialRating} /> */}
+      <Rating type={RatingType.readOnly} initialRating={initialRating} />
+      {/* <Rating type={RatingType.disabled} initialRating={initialRating} /> */}
+      {/* <Rating type={RatingType.noRating} initialRating={initialRating} /> */}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 .Star {
   cursor: pointer;
-  margin-right: 0.4rem;
+  padding-right: 0.4rem;
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -12,7 +12,8 @@
   opacity: 0.5;
 }
 
-.Star__disabled:hover  {
+.Star__disabled:hover,
+.Star__readOnly:hover {
   transform: none;
   cursor: initial;
 }

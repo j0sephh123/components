@@ -1,15 +1,17 @@
 import classes from "./Rating.module.css";
 import { useState } from "react";
-import { RatingProps } from "../../types";
+import { RatingProps, RatingType } from "../../types";
 import Star from "./Star/Star";
 import {
+  countActiveItems,
   findItemIndex,
+  mouseEnterSlice,
   resetActive,
   resetClickedAndActive,
-  setClickedItems,
+  sliceItems,
 } from "./utils";
 
-const Rating = ({ initialRating }: RatingProps) => {
+const Rating = ({ initialRating, type }: RatingProps) => {
   const [hover, setHover] = useState(false);
   const [rating, setRating] = useState(initialRating);
   const [hoverRating, setHoverRating] = useState(initialRating);
@@ -28,24 +30,10 @@ const Rating = ({ initialRating }: RatingProps) => {
         return setRating((prev) => prev.map(resetClickedAndActive));
       }
 
-      return setRating((prev) => [
-        ...prev
-          .slice(0, itemIndex + 1)
-          .map((item) => setClickedItems(item, id, true)),
-        ...prev
-          .slice(itemIndex + 1)
-          .map((item) => setClickedItems(item, id, false)),
-      ]);
+      return setRating((prev) => sliceItems(prev, itemIndex, id));
     }
 
-    setRating((prev) => [
-      ...prev
-        .slice(0, itemIndex + 1)
-        .map((item) => setClickedItems(item, id, true)),
-      ...prev
-        .slice(itemIndex + 1)
-        .map((item) => setClickedItems(item, id, false)),
-    ]);
+    setRating((prev) => sliceItems(prev, itemIndex, id));
   };
 
   const onMouseEnter = (id: number) => {
@@ -54,51 +42,38 @@ const Rating = ({ initialRating }: RatingProps) => {
     const hoveredItemIndex = rating.findIndex((item) =>
       findItemIndex(item, id)
     );
-    const lastActiveItemIndex =
-      rating.filter((itemArg) => itemArg.active).length - 1;
+    const lastActiveItemIndex = countActiveItems(rating);
 
     if (lastActiveItemIndex === hoveredItemIndex) {
       return setHoverRating(rating);
     }
 
     if (hoveredItemIndex > lastActiveItemIndex) {
-      return setHoverRating(() => [
-        ...rating
-          .slice(0, hoveredItemIndex + 1)
-          .map((item) => setClickedItems(item, id, true)),
-        ...rating.slice(hoveredItemIndex + 1),
-      ]);
+      return setHoverRating(mouseEnterSlice(rating, hoveredItemIndex, id));
     }
 
     if (hoveredItemIndex < lastActiveItemIndex) {
-      return setHoverRating(() => [
-        ...rating
-          .slice(0, hoveredItemIndex + 1)
-          .map((item) => setClickedItems(item, id, true)),
-        ...rating
-          .slice(hoveredItemIndex + 1)
-          .map((item) => setClickedItems(item, id, false)),
-      ]);
+      return setHoverRating(sliceItems(rating, hoveredItemIndex, id));
     }
   };
-  const onMouseLeave = (id: number) => {
-    setHover(false);
-  };
 
-  const ratingMap = hover ? hoverRating : rating;
+  const onMouseLeave = () => setHover(false);
+
+  const ratingCollection = hover ? hoverRating : rating;
 
   return (
     <>
       <div className={classes.Rating}>
-        {ratingMap.map(({ id, active }) => {
+        {ratingCollection.map((ratingItem) => {
           return (
             <Star
+              disabled={type === RatingType.disabled}
+              readOnly={type === RatingType.readOnly}
+              key={ratingItem.id}
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}
               onClick={onClick}
-              active={active}
-              id={id}
-              key={id}
+              {...ratingItem}
             />
           );
         })}

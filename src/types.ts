@@ -11,27 +11,26 @@ export enum RatingType {
   disabled = "disabled",
 }
 
+export type fiveStringTuple = [string, string, string, string, string];
+export type tenStringTuple = [
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string
+];
+
 export type RatingProps = {
-  onChange: (val: number) => void;
-  stars?:
-    | 5
-    | 10
-    | [string, string, string, string, string]
-    | [
-        string,
-        string,
-        string,
-        string,
-        string,
-        string,
-        string,
-        string,
-        string,
-        string
-      ];
+  stars?: 5 | 10 | fiveStringTuple | tenStringTuple;
   className?: string;
+  onChange: (val: number) => void;
   starProps: {
-    type: RatingType;
+    type?: RatingType;
     starClassName?: string;
     fill?: string;
   };
@@ -47,7 +46,7 @@ export type StarProps = {
   index: number;
 
   starProps: {
-    type: RatingType;
+    type?: RatingType;
     starClassName?: string;
     fill?: string;
   };

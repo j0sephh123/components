@@ -37,7 +37,11 @@ const Star = ({
   onMouseLeave,
   index,
   active,
-  starProps: { type, fill = defaults.fill, starClassName },
+  starProps: {
+    type = RatingType.controlled,
+    fill = defaults.fill,
+    starClassName,
+  },
 }: StarProps) => {
   const disabled = type === RatingType.disabled;
   const readOnly = type === RatingType.readOnly;
